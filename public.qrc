@@ -1,0 +1,17 @@
+<RCC>
+    <qresource prefix="/">
+        <file>back.png</file>
+        <file>chart.png</file>
+        <file>Dark.qss</file>
+        <file>logo1.png</file>
+        <file>negative.png</file>
+        <file>plus.png</file>
+        <file>Setting.png</file>
+        <file>support.png</file>
+        <file>clean.png</file>
+        <file>lock.png</file>
+        <file>tik.png</file>
+        <file>backspace.png</file>
+        <file>edit.png</file>
+    </qresource>
+</RCC>
