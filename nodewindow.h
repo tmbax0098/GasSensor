@@ -33,6 +33,10 @@ private slots:
 
     void on_pushButtonDownset_clicked();
 
+    void on_radioButtonHour_toggled(bool checked);
+
+    void on_radioButtonReal_toggled(bool checked);
+
 private:
     Ui::NodeWindow *ui;
 
@@ -54,9 +58,19 @@ private:
     Field currentField = Field::None;
 
     QChart *chart;
-    QChartView *chartView;
+
     QSplineSeries *series;
-    QVBoxLayout *vLayout;
+
+    QVBoxLayout *layout;
+    QChartView *chartView;
+
+    QValueAxis *axisX;
+    QValueAxis *axisY;
+    QDateTimeAxis *axisTime ;
+
+
+    void disableRadioButtons();
+    void enableRadioButtons();
 
 
     // QWidget interface

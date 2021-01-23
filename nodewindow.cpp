@@ -18,55 +18,50 @@ NodeWindow::NodeWindow(QWidget *parent) :
 
     this->setStyleSheet(StyleSheet);
 
-
-    this->series = new QSplineSeries();
-
-    this->series->append(0,5000);
-    this->series->append(1,5000);
-    this->series->append(2,5000);
-    this->series->append(3,5000);
-    this->series->append(4,5000);
-    this->series->append(5,6000);
-    this->series->append(6,6000);
-    this->series->append(7,6000);
-    this->series->append(8,6000);
-    this->series->append(9,6000);
-    this->series->setPointsVisible(true);
-    series->setColor(Qt::red);
     QPen pen(Qt::red , 3);
-    series->setPen(pen);
 
-    QValueAxis *axisX = new QValueAxis;
+    axisX = new QValueAxis;
     axisX->setRange(0, 80);
     axisX->setTickCount(10);
-    QValueAxis *axisY = new QValueAxis;
+
+    axisY = new QValueAxis;
     axisY->setRange(0, 10000);
     axisY->setTickCount(10);
 
+    axisTime = new QDateTimeAxis;
+    axisTime->setFormat("hh:mm");
+    //    axisTime->setTickCount(1);
+    //    axisTime->setFormat("dd HH:mm");
+    //    axisTime->setFormat("yyyy-MM-dd\nhh:mm:ss");
 
+
+    this->series = new QSplineSeries();
+    this->series->setPointsVisible(true);
+    this->series->setColor(Qt::red);
+    this->series->setPen(pen);
     this->series->setUseOpenGL(true);
+    this->series->attachAxis(axisX);
+    this->series->attachAxis(axisY);
 
-    this->chart = new QChart ();
 
+    this->chart = new QChart();
+    this->chart->legend()->hide();
     this->chart->setTheme(QChart::ChartThemeDark);
-    this->chart->addSeries(this->series);
-    this->chart->addAxis(axisX , Qt::AlignBottom);
     this->chart->addAxis(axisY , Qt::AlignLeft);
+    this->chart->addAxis(axisX , Qt::AlignBottom);
+    this->chart->addSeries(this->series);
+
 
     this->chartView = new QChartView(this->chart);
-    this->chartView->setRenderHint(QPainter::Antialiasing);
-
-    vLayout = new QVBoxLayout();
-    vLayout->addWidget(chartView);
-
-    this->ui->widgetChart->setLayout(vLayout);
-
+    layout = new QVBoxLayout;
+    layout->addWidget(this->chartView);
+    ui->widgetChart->setLayout(layout);
 
     QObject::connect(&keyboardWindow , &KeyboardWindow::onAccept ,[=](QString value){
         setKeyboardResult (value);
     });
 
-
+    on_radioButtonHour_toggled(true);
 
 }
 
@@ -90,7 +85,8 @@ void NodeWindow::setNode(int value)
 
 void NodeWindow::setNewPoint(Packet &packet)
 {
-
+    if(ui->radioButtonHour->isChecked())
+        return;
 
     QList<QPointF> Points = this->series->points();
 
@@ -114,8 +110,7 @@ void NodeWindow::setNewPoint(Packet &packet)
     this->series->setPointsVisible();
 
     this->chart->removeSeries(this->series);
-    this->chart->addSeries(series);
-
+    this->chart->addSeries(this->series);
 }
 
 void NodeWindow::setKeyboardResult(QString value)
@@ -186,4 +181,73 @@ void NodeWindow::closeEvent(QCloseEvent *event)
 bool NodeWindow::isOpen()
 {
     return this->open;
+}
+
+void NodeWindow::on_radioButtonHour_toggled(bool checked)
+{
+    disableRadioButtons();
+
+    this->series->clear();
+
+    if(checked){
+        QSqlQuery query("SELECT datetime , value FROM node WHERE id=" + QString::number(this->node) + " ORDER BY datetime ");
+        if(query.exec()){
+            while (query.next()) {
+                this->series->append(
+                            query.value(0).toDateTime().toMSecsSinceEpoch() ,
+                            query.value(1).toDouble());
+            }
+        }else{
+            qDebug()<<"ERROR : "<<query.lastError().text()<<endl;
+        }
+        query.clear();
+
+    }
+
+    if(this->series->points().size() > 0){
+        axisTime->setMin(QDateTime::fromMSecsSinceEpoch(this->series->points().first().x()));
+        axisTime->setMax(QDateTime::fromMSecsSinceEpoch(this->series->points().last().x()));
+    }
+
+    this->series->attachAxis(axisY);
+    this->series->attachAxis(axisTime);
+
+    this->chart->removeAxis(axisX);
+    this->chart->addAxis(axisTime , Qt::AlignBottom);
+
+    this->chart->removeSeries(this->series);
+    this->chart->addSeries(this->series);
+
+    enableRadioButtons();
+}
+
+void NodeWindow::on_radioButtonReal_toggled(bool checked)
+{
+    disableRadioButtons();
+    if(checked){
+
+        this->series->clear();
+
+        this->series->attachAxis(axisX);
+        this->series->attachAxis(axisY);
+
+        this->chart->removeAxis(axisTime);
+        this->chart->addAxis(axisX , Qt::AlignBottom);
+
+        this->chart->removeSeries(this->series);
+        this->chart->addSeries(this->series);
+    }
+    enableRadioButtons();
+}
+
+void NodeWindow::disableRadioButtons()
+{
+    ui->radioButtonHour->setEnabled(false);
+    ui->radioButtonReal->setEnabled(false);
+}
+
+void NodeWindow::enableRadioButtons()
+{
+    ui->radioButtonHour->setEnabled(true);
+    ui->radioButtonReal->setEnabled(true);
 }

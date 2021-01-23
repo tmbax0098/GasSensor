@@ -6,6 +6,7 @@
 #include <QNetworkRequest>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
+#include <QProcess>
 
 class Packet : public QObject
 {
@@ -39,6 +40,10 @@ public:
     int getMax() const;
     void setMax(int value);
 
+    bool getWarning() const;
+
+    void alarmOff();
+
 signals:
 
 private:
@@ -46,14 +51,16 @@ private:
     short node;
     bool valid;
     bool saved;
+    bool warning;
     QDateTime date;
+
+    void alarmOn();
+
 
     int min;
     int max;
 
-    QNetworkAccessManager networkAccessManager;
-    QNetworkRequest networkRequest;
-    QNetworkReply *networkReply;
+    QProcess process;
 };
 
 #endif // PACKET_H

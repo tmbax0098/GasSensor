@@ -216,4 +216,16 @@ void MainWindow::manageNewPacket(QString packet)
             break;
         }
     }
+
+    if(!packet_1.getWarning() &&
+            !packet_2.getWarning() &&
+            !packet_3.getWarning() &&
+            !packet_4.getWarning() &&
+            !packet_5.getWarning() &&
+            !packet_6.getWarning()){
+
+        packet_1.alarmOff();
+
+    }
+
 }

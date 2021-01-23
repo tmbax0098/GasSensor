@@ -7,6 +7,7 @@ Packet::Packet(QObject *parent)
     this->node = 0;
     this->valid = false;
     this->saved=false;
+    this->warning = false;
 }
 
 double Packet::getValue() const
@@ -59,8 +60,10 @@ void Packet::setPacket(QString packet)
     saved = false;
 
     if(value < min || value > max){
-        QUrl url("127.0.0.1:3000/PC4ON");
-        networkReply= networkAccessManager.get(QNetworkRequest(url));
+        warning = true;
+        this->alarmOn();
+    }else{
+        warning = false;
     }
 
 }
@@ -94,6 +97,25 @@ int Packet::getMax() const
 void Packet::setMax(int value)
 {
     max = value;
+}
+
+bool Packet::getWarning() const
+{
+    return warning;
+}
+
+void Packet::alarmOff()
+{
+    QProcess process;
+    process.start("sudo python pin.py PA20 0");
+    process.waitForStarted();
+}
+
+void Packet::alarmOn()
+{
+    QProcess process;
+    process.start("sudo python pin.py PA20 1");
+    process.waitForStarted();
 }
 
 //QPointF Packet::getPoint()
