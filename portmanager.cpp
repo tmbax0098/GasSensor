@@ -21,13 +21,14 @@ PortManager::PortManager(QObject *parent) : QObject(parent)
 
     QObject::connect(&sp , &QSerialPort::readyRead , [=](){
 		
-		qDebug()<<"NEW PACKET READY FOR READ!";
+		//qDebug()<<"NEW PACKET READY FOR READ!";
 		
         QString packet = sp.readLine();
+        packet = packet.split("\r")[0];
 
-         qDebug()<<"NEW PACKET \t"<<packet<<endl;
+        //qDebug()<<"NEW PACKET \t"<<packet<<endl;
 
-         emit newPacket(packet);
+        emit newPacket(packet);
     });
 
     QObject::connect(&sp , &QSerialPort::errorOccurred , [=](){

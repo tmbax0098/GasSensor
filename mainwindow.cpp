@@ -5,6 +5,7 @@
 #include <QFile>
 #include <QLayout>
 #include<QDebug>
+
 #include<QSqlError>
 #include <packet.h>
 
@@ -217,15 +218,16 @@ void MainWindow::manageNewPacket(QString packet)
         }
     }
 
-    if(!packet_1.getWarning() &&
-            !packet_2.getWarning() &&
-            !packet_3.getWarning() &&
-            !packet_4.getWarning() &&
-            !packet_5.getWarning() &&
-            !packet_6.getWarning()){
+    //if(!packet_1.getWarning() &&
+           // !packet_2.getWarning() &&
+           // !packet_3.getWarning() &&
+          //  !packet_4.getWarning() &&
+        //    !packet_5.getWarning() &&
+      //      !packet_6.getWarning()){
 
-        packet_1.alarmOff();
+        //packet_1.alarmOff();
+        //sleep(2000);
 
-    }
+    //}
 
 }

@@ -1,5 +1,5 @@
 #include "packet.h"
-
+#include<QDebug>
 
 Packet::Packet(QObject *parent)
 {
@@ -42,9 +42,14 @@ void Packet::setValid(bool value)
 
 void Packet::setPacket(QString packet)
 {
-    if(packet.length() >=5 && packet.mid(0,1) == "#" && packet.right(1) == "$"){
+    
+        //qDebug()<<"packet.length() >=4 : "<<packet.length() ;
+        //qDebug()<<"packet.left(2) : "<<packet.left(2);
+    
+    if(packet.length() >=4 && packet.left(2) == "$N"){
         node = packet.mid(2,1).toShort();
         value = packet.mid(3,packet.length() - 1).toDouble();
+        
         value -=280;
         if(value > 0){
             value/=0.3815;
@@ -61,10 +66,14 @@ void Packet::setPacket(QString packet)
 
     if(value < min || value > max){
         warning = true;
-        this->alarmOn();
+        //this->alarmOn();
     }else{
         warning = false;
     }
+
+    //qDebug()<<"VALUe : "<<value;
+
+
 
 }
 

@@ -26,6 +26,8 @@ NodeWindow::NodeWindow(QWidget *parent) :
 
     axisY = new QValueAxis;
     axisY->setRange(0, 10000);
+    axisY->setMin(0);
+    axisY->setMax(10000);
     axisY->setTickCount(10);
 
     axisTime = new QDateTimeAxis;
@@ -104,6 +106,8 @@ void NodeWindow::setNewPoint(Packet &packet)
 
     QPointF point(Points.size() , QRandomGenerator::global()->bounded(10000));
     Points.append(point);
+    
+    qDebug()<<"Points ===> "<<Points.size();
 
     this->series->clear();
     this->series->append(Points);
