@@ -64,7 +64,7 @@ private:
 
     QChart *chart;
 
-    QSplineSeries *series;
+    QLineSeries *series;
 
     QVBoxLayout *layout;
     QChartView *chartView;

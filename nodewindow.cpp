@@ -17,6 +17,8 @@ NodeWindow::NodeWindow(QWidget *parent) :
     QString StyleSheet = QLatin1String(File.readAll());
 
     this->setStyleSheet(StyleSheet);
+    
+    node = new Packet;
 
     QPen pen(Qt::red , 3);
 
@@ -37,7 +39,7 @@ NodeWindow::NodeWindow(QWidget *parent) :
     //    axisTime->setFormat("yyyy-MM-dd\nhh:mm:ss");
 
 
-    this->series = new QSplineSeries();
+    this->series = new QLineSeries();
     this->series->setPointsVisible(true);
     this->series->setColor(Qt::red);
     this->series->setPen(pen);
@@ -63,7 +65,7 @@ NodeWindow::NodeWindow(QWidget *parent) :
         setKeyboardResult (value);
     });
 
-    on_radioButtonHour_toggled(true);
+    //on_radioButtonHour_toggled(true);
 
 }
 

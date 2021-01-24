@@ -77,7 +77,7 @@ MainWindow::MainWindow(QWidget *parent)
     QObject::connect(&portManager , &PortManager::newPacket ,this, &MainWindow::manageNewPacket);
 
 
-    timerDatabase.setInterval(60000);
+    timerDatabase.setInterval(2000);
     QObject::connect(&timerDatabase , &QTimer::timeout , [=](){
         saveRecord(packet_1);
         saveRecord(packet_2);
@@ -211,12 +211,13 @@ void MainWindow::saveNodeSetting(Packet *packet)
 
         query.prepare("UPDATE node_setting SET up=" +
                       QString::number(packet->getMax()) +
-                      " down="+ QString::number(packet->getMin()) +
+                      " , down="+ QString::number(packet->getMin()) +
                       "WHERE id=" + QString::number(packet->getNode()));
 
         query.exec();
         query.clear();
     }
+    loadNodeSetting();
 }
 
 void MainWindow::manageNewPacket(QString packet)
