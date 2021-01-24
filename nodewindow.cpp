@@ -72,19 +72,6 @@ NodeWindow::~NodeWindow()
     delete ui;
 }
 
-int NodeWindow::getNode() const
-{
-    return node;
-}
-
-void NodeWindow::setNode(int value)
-{
-    if(value > 0 && value < 6){
-        node = value;
-        ui->lblNode->setText("Node " + QString::number(value));
-    }
-}
-
 void NodeWindow::setNewPoint(Packet &packet)
 {
     if(ui->radioButtonHour->isChecked())
@@ -117,14 +104,44 @@ void NodeWindow::setNewPoint(Packet &packet)
     this->chart->addSeries(this->series);
 }
 
+void NodeWindow::setArchive(QList<QPointF> list)
+{
+    this->series->clear();
+
+    foreach (QPointF point, list) {
+        this->series->append(point);
+    }
+
+    if(this->series->points().size() > 0){
+        axisTime->setMin(QDateTime::fromMSecsSinceEpoch(this->series->points().first().x()));
+        axisTime->setMax(QDateTime::fromMSecsSinceEpoch(this->series->points().last().x()));
+    }
+
+    this->series->attachAxis(axisY);
+    this->series->attachAxis(axisTime);
+
+    this->chart->removeAxis(axisX);
+    this->chart->addAxis(axisTime , Qt::AlignBottom);
+
+    this->chart->removeSeries(this->series);
+    this->chart->addSeries(this->series);
+
+    enableRadioButtons();
+
+}
+
 void NodeWindow::setKeyboardResult(QString value)
 {
     switch (currentField) {
     case UpSet:
+        node->setMax(value.toInt());
         ui->lineEditUpSet->setText(value);
+        emit saveNodeSetting(node);
         break;
     case DownSet:
+        node->setMin(value.toInt());
         ui->lineEditDownSet->setText(value);
+        emit saveNodeSetting(node);
         break;
     default:
         break;
@@ -148,38 +165,13 @@ void NodeWindow::on_pushButtonDownset_clicked()
 void NodeWindow::showEvent(QShowEvent *event)
 {
     this->open = true;
-    database = QSqlDatabase::addDatabase("QSQLITE");
-    database.setDatabaseName("GasSensor.db");
-    bool ok = database.open();
-    qDebug()<<"NodeWindow ==> openDatabase ==> database is open state : "<<ok ;
-
-    if(ok){
-        QSqlQuery query;
-        if(query.exec("select * from node_setting where node=" + QString::number(node))){
-            if(query.first()){
-                ui->lineEditUpSet->setText(query.value(2).toString());
-                ui->lineEditDownSet->setText(query.value(3).toString());
-                if(query.value(1).toInt() != 1){
-                    this->close();
-                }
-            }else{
-                this->close();
-            }
-        }else{
-            qDebug()<<"ERROR ===> "<<query.lastError().text();
-        }
-    }
+    emit loadArchive(this->node->getNode());
 }
 
 void NodeWindow::closeEvent(QCloseEvent *event)
 {
     this->open = false;
-    database.close();
-    QStringList list = QSqlDatabase::connectionNames();
-    foreach (QString name,list) {
-        qDebug()<<"Connection closed! "<<name;
-        QSqlDatabase::removeDatabase(name);
-    }
+    this->series->points().clear();
 }
 
 bool NodeWindow::isOpen()
@@ -190,39 +182,9 @@ bool NodeWindow::isOpen()
 void NodeWindow::on_radioButtonHour_toggled(bool checked)
 {
     disableRadioButtons();
-
-    this->series->clear();
-
     if(checked){
-        QSqlQuery query("SELECT datetime , value FROM node WHERE id=" + QString::number(this->node) + " ORDER BY datetime ");
-        if(query.exec()){
-            while (query.next()) {
-                this->series->append(
-                            query.value(0).toDateTime().toMSecsSinceEpoch() ,
-                            query.value(1).toDouble());
-            }
-        }else{
-            qDebug()<<"ERROR : "<<query.lastError().text()<<endl;
-        }
-        query.clear();
-
+        emit loadArchive(this->node->getNode());
     }
-
-    if(this->series->points().size() > 0){
-        axisTime->setMin(QDateTime::fromMSecsSinceEpoch(this->series->points().first().x()));
-        axisTime->setMax(QDateTime::fromMSecsSinceEpoch(this->series->points().last().x()));
-    }
-
-    this->series->attachAxis(axisY);
-    this->series->attachAxis(axisTime);
-
-    this->chart->removeAxis(axisX);
-    this->chart->addAxis(axisTime , Qt::AlignBottom);
-
-    this->chart->removeSeries(this->series);
-    this->chart->addSeries(this->series);
-
-    enableRadioButtons();
 }
 
 void NodeWindow::on_radioButtonReal_toggled(bool checked)
@@ -242,6 +204,18 @@ void NodeWindow::on_radioButtonReal_toggled(bool checked)
         this->chart->addSeries(this->series);
     }
     enableRadioButtons();
+}
+
+Packet *NodeWindow::getNode() const
+{
+    return node;
+}
+
+void NodeWindow::setNode(Packet *value)
+{
+    node = value;
+    ui->lineEditUpSet->setText(QString::number(value->getMax()));
+    ui->lineEditDownSet->setText(QString::number(value->getMin()));
 }
 
 void NodeWindow::disableRadioButtons()

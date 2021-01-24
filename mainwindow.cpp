@@ -41,29 +41,32 @@ MainWindow::MainWindow(QWidget *parent)
     QObject::connect(&passwordCertificateWindow, &PasswordCertificateWindow::login , &settingWindow , &SettingWindow::showFullScreen);
     QObject::connect(&passwordCertificateWindow, &PasswordCertificateWindow::login, &passwordCertificateWindow , &PasswordCertificateWindow::close);
 
+    QObject::connect(&nodeWindow , &NodeWindow::loadArchive,this , &MainWindow::getNodeArchive);
+    QObject::connect(&nodeWindow , &NodeWindow::saveNodeSetting,this , &MainWindow::saveNodeSetting);
+
 
     QObject::connect(ui->pushButtonNode1 , &QPushButton::clicked ,[=](){
-        nodeWindow.setNode(1);
+        nodeWindow.setNode(&packet_1);
         nodeWindow.showFullScreen();
     });
     QObject::connect(ui->pushButtonNode2 , &QPushButton::clicked ,[=](){
-        nodeWindow.setNode(2);
+        nodeWindow.setNode(&packet_2);
         nodeWindow.showFullScreen();
     });
     QObject::connect(ui->pushButtonNode3 , &QPushButton::clicked ,[=](){
-        nodeWindow.setNode(3);
+        nodeWindow.setNode(&packet_3);
         nodeWindow.showFullScreen();
     });
     QObject::connect(ui->pushButtonNode4 , &QPushButton::clicked ,[=](){
-        nodeWindow.setNode(4);
+        nodeWindow.setNode(&packet_4);
         nodeWindow.showFullScreen();
     });
     QObject::connect(ui->pushButtonNode5 , &QPushButton::clicked ,[=](){
-        nodeWindow.setNode(5);
+        nodeWindow.setNode(&packet_5);
         nodeWindow.showFullScreen();
     });
     QObject::connect(ui->pushButtonNode6 , &QPushButton::clicked ,[=](){
-        nodeWindow.setNode(7);
+        nodeWindow.setNode(&packet_6);
         nodeWindow.showFullScreen();
     });
 
@@ -101,7 +104,6 @@ void MainWindow::closeEvent(QCloseEvent *event)
         QSqlDatabase::removeDatabase(name);
     }
 }
-
 
 void MainWindow::on_btnSetting_clicked()
 {
@@ -180,11 +182,48 @@ void MainWindow::saveRecord(Packet &packet)
     }
 }
 
+void MainWindow::getNodeArchive(int node)
+{
+    QList<QPointF> list;
+    QSqlQuery query("SELECT datetime , value FROM node WHERE id=" + QString::number(node) + " ORDER BY datetime ");
+    if(query.exec()){
+        while (query.next()) {
+            list.append(
+                        QPointF(
+                            query.value(0).toDateTime().toMSecsSinceEpoch() ,
+                            query.value(1).toDouble()
+                            )
+                        );
+        }
+    }else{
+        qDebug()<<"ERROR : "<<query.lastError().text()<<endl;
+    }
+    query.clear();
+
+    nodeWindow.setArchive(list);
+
+}
+
+void MainWindow::saveNodeSetting(Packet *packet)
+{
+    QSqlQuery query;
+    if(database.isOpen()){
+
+        query.prepare("UPDATE node_setting SET up=" +
+                      QString::number(packet->getMax()) +
+                      " down="+ QString::number(packet->getMin()) +
+                      "WHERE id=" + QString::number(packet->getNode()));
+
+        query.exec();
+        query.clear();
+    }
+}
+
 void MainWindow::manageNewPacket(QString packet)
 {
     Packet pak;
     pak.setPacket(packet);
-    if(nodeWindow.isOpen() && nodeWindow.getNode() == pak.getNode()){
+    if(nodeWindow.isOpen() && nodeWindow.getNode()->getNode() == pak.getNode()){
         nodeWindow.setNewPoint(pak);
     }
     if(pak.getValid()){
@@ -219,14 +258,14 @@ void MainWindow::manageNewPacket(QString packet)
     }
 
     //if(!packet_1.getWarning() &&
-           // !packet_2.getWarning() &&
-           // !packet_3.getWarning() &&
-          //  !packet_4.getWarning() &&
-        //    !packet_5.getWarning() &&
-      //      !packet_6.getWarning()){
+    // !packet_2.getWarning() &&
+    // !packet_3.getWarning() &&
+    //  !packet_4.getWarning() &&
+    //    !packet_5.getWarning() &&
+    //      !packet_6.getWarning()){
 
-        //packet_1.alarmOff();
-        //sleep(2000);
+    //packet_1.alarmOff();
+    //sleep(2000);
 
     //}
 

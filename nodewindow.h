@@ -19,11 +19,16 @@ public:
     explicit NodeWindow(QWidget *parent = nullptr);
     ~NodeWindow();
 
-    int getNode() const;
-    void setNode(int value);
+    Packet *getNode() const;
+    void setNode(Packet *value);
+
+signals:
+    void loadArchive(int node);
+    void saveNodeSetting(Packet *packet);
 
 public slots:
     void setNewPoint(Packet &packet);
+    void setArchive(QList<QPointF> list);
     bool isOpen();
 
 private slots:
@@ -42,7 +47,8 @@ private:
 
     QSqlDatabase database;
 
-    int node =1;
+//    int node =1;
+    Packet *node;
     bool open ;
 
     KeyboardWindow keyboardWindow;
@@ -52,7 +58,6 @@ private:
         UpSet,
         DownSet
     };
-
 
 
     Field currentField = Field::None;

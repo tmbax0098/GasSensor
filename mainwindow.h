@@ -57,6 +57,8 @@ private:
     Packet packet_6;
 
     void saveRecord(Packet &packet);
+    void getNodeArchive(int node);
+    void saveNodeSetting(Packet *packet);
 
     // QWidget interface
 protected:
