@@ -76,7 +76,7 @@ padding :0;</string>
      <widget class="QPlainTextEdit" name="plainTextEdit">
       <property name="font">
        <font>
-        <pointsize>12</pointsize>
+        <pointsize>14</pointsize>
         <weight>50</weight>
         <bold>false</bold>
        </font>
@@ -85,9 +85,46 @@ padding :0;</string>
        <bool>true</bool>
       </property>
       <property name="plainText">
-       <string>Hi this project start in date 2020-08-24</string>
+       <string>The methane gas detection project with Figaro sensor under the supervision of Shiraz University professor Dr. Mohammad Hossein Sheikhi and two master and doctoral students of Shiraz University Mohammad Hossein Saadatmand and Hossein Roshan has been tested and calibrated in the clean room laboratory of this university.</string>
       </property>
      </widget>
+    </item>
+    <item>
+     <layout class="QHBoxLayout" name="horizontalLayout">
+      <item>
+       <widget class="QLabel" name="label_3">
+        <property name="styleSheet">
+         <string notr="true">min-height : 150px;
+image: url(:/1.jpg);</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_4">
+        <property name="styleSheet">
+         <string notr="true">min-height : 150px;
+image: url(:/2.jpg);</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item>
+       <widget class="QLabel" name="label_2">
+        <property name="styleSheet">
+         <string notr="true">min-height : 150px;
+image: url(:/3.jpg);</string>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </item>
    </layout>
   </widget>
