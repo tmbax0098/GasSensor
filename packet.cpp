@@ -116,14 +116,14 @@ bool Packet::getWarning() const
 void Packet::alarmOff()
 {
     QProcess process;
-    process.start("sudo python pin.py PA20 0");
+    process.start("python pin.py PA20 0");
     process.waitForStarted();
 }
 
 void Packet::alarmOn()
 {
     QProcess process;
-    process.start("sudo python pin.py PA20 1");
+    process.start("python pin.py PA20 1");
     process.waitForStarted();
 }
 

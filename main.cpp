@@ -2,9 +2,12 @@
 
 #include <QApplication>
 #include <QProcess>
+#include <QThread>
 
 int main(int argc, char *argv[])
 {
+
+    QThread::msleep(3000);
     QProcess process;
     process.start("sudo python pin.py PD14 0");
     process.waitForStarted();
