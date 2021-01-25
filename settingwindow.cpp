@@ -53,3 +53,8 @@ void SettingWindow::on_pushButton_2_clicked()
 {
     exportWindow.showFullScreen();
 }
+
+void SettingWindow::closeEvent(QCloseEvent *event)
+{
+    emit onClose();
+}

@@ -20,6 +20,9 @@ public:
     explicit SettingWindow(QWidget *parent = nullptr);
     ~SettingWindow();
 
+signals:
+    void onClose();
+
 private slots:
     void on_btnBack_clicked();
 
@@ -42,6 +45,10 @@ private:
     SettingPasswordWindow settingPasswordWindow;
     SettingPortWindow settingPortWindow;
     ExportWindow exportWindow;
+
+    // QWidget interface
+protected:
+    void closeEvent(QCloseEvent *event);
 };
 
 #endif // SETTINGWINDOW_H

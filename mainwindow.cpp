@@ -77,6 +77,11 @@ MainWindow::MainWindow(QWidget *parent)
     QObject::connect(&portManager , &PortManager::newPacket ,this, &MainWindow::manageNewPacket);
 
 
+    QObject::connect(&settingWindow , &SettingWindow::onClose , [=](){
+        openDatabase();
+        loadNodeSetting();
+    });
+
     timerDatabase.setInterval(2000);
     QObject::connect(&timerDatabase , &QTimer::timeout , [=](){
         saveRecord(packet_1);
@@ -107,7 +112,8 @@ void MainWindow::closeEvent(QCloseEvent *event)
 
 void MainWindow::on_btnSetting_clicked()
 {
-
+    QCloseEvent *event;
+    closeEvent(event);
     passwordCertificateWindow.reset();
     passwordCertificateWindow.showFullScreen();
 }
