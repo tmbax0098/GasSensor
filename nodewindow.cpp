@@ -24,13 +24,15 @@ NodeWindow::NodeWindow(QWidget *parent) :
 
     axisX = new QValueAxis;
     axisX->setRange(0, 80);
-    axisX->setTickCount(10);
+    axisY->setMin(0);
+    axisY->setMax(80);
+    axisX->setTickCount(8);
 
     axisY = new QValueAxis;
     axisY->setRange(0, 10000);
     axisY->setMin(0);
     axisY->setMax(10000);
-    axisY->setTickCount(10);
+    axisY->setTickCount(5);
 
     axisTime = new QDateTimeAxis;
     axisTime->setFormat("hh:mm");
@@ -44,16 +46,22 @@ NodeWindow::NodeWindow(QWidget *parent) :
     this->series->setColor(Qt::red);
     this->series->setPen(pen);
     this->series->setUseOpenGL(true);
-    this->series->attachAxis(axisX);
-    this->series->attachAxis(axisY);
+
 
 
     this->chart = new QChart();
     this->chart->legend()->hide();
     this->chart->setTheme(QChart::ChartThemeDark);
+
+    this->chart->addSeries(this->series);
+
     this->chart->addAxis(axisY , Qt::AlignLeft);
     this->chart->addAxis(axisX , Qt::AlignBottom);
-    this->chart->addSeries(this->series);
+
+
+
+    this->series->attachAxis(axisX);
+    this->series->attachAxis(axisY);
 
 
     this->chartView = new QChartView(this->chart);
@@ -95,8 +103,6 @@ void NodeWindow::setNewPoint(Packet &packet)
 
     QPointF point(Points.size() , QRandomGenerator::global()->bounded(10000));
     Points.append(point);
-    
-    qDebug()<<"Points ===> "<<Points.size();
 
     this->series->clear();
     this->series->append(Points);
@@ -104,6 +110,10 @@ void NodeWindow::setNewPoint(Packet &packet)
 
     this->chart->removeSeries(this->series);
     this->chart->addSeries(this->series);
+
+
+    this->series->attachAxis(axisX);
+    this->series->attachAxis(axisY);
 }
 
 void NodeWindow::setArchive(QList<QPointF> list)
@@ -196,14 +206,14 @@ void NodeWindow::on_radioButtonReal_toggled(bool checked)
 
         this->series->clear();
 
-        this->series->attachAxis(axisX);
-        this->series->attachAxis(axisY);
-
         this->chart->removeAxis(axisTime);
         this->chart->addAxis(axisX , Qt::AlignBottom);
 
         this->chart->removeSeries(this->series);
         this->chart->addSeries(this->series);
+
+        this->series->attachAxis(axisX);
+        this->series->attachAxis(axisY);
     }
     enableRadioButtons();
 }
