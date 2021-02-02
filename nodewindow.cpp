@@ -24,8 +24,8 @@ NodeWindow::NodeWindow(QWidget *parent) :
 
     axisX = new QValueAxis;
     axisX->setRange(0, 80);
-    axisY->setMin(0);
-    axisY->setMax(80);
+    axisX->setMin(0);
+    axisX->setMax(80);
     axisX->setTickCount(8);
 
     axisY = new QValueAxis;
@@ -73,7 +73,7 @@ NodeWindow::NodeWindow(QWidget *parent) :
         setKeyboardResult (value);
     });
 
-    //on_radioButtonHour_toggled(true);
+    on_radioButtonHour_toggled(true);
 
 }
 
@@ -86,6 +86,7 @@ void NodeWindow::setNewPoint(Packet &packet)
 {
     if(ui->radioButtonHour->isChecked())
         return;
+
 
     QList<QPointF> Points = this->series->points();
 
