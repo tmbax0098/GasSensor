@@ -157,7 +157,7 @@
     <item>
      <layout class="QGridLayout" name="gridLayout">
       <item row="0" column="0">
-       <widget class="QLabel" name="label_2">
+       <widget class="QLabel" name="label1">
         <property name="minimumSize">
          <size>
           <width>65</width>
@@ -210,7 +210,7 @@
        </widget>
       </item>
       <item row="0" column="3">
-       <widget class="QLabel" name="label_5">
+       <widget class="QLabel" name="label4">
         <property name="minimumSize">
          <size>
           <width>65</width>
@@ -232,7 +232,7 @@
        </widget>
       </item>
       <item row="0" column="1">
-       <widget class="QLabel" name="label_3">
+       <widget class="QLabel" name="label2">
         <property name="minimumSize">
          <size>
           <width>65</width>
@@ -254,7 +254,7 @@
        </widget>
       </item>
       <item row="0" column="4">
-       <widget class="QLabel" name="label_6">
+       <widget class="QLabel" name="label5">
         <property name="minimumSize">
          <size>
           <width>65</width>
@@ -400,7 +400,7 @@
        </widget>
       </item>
       <item row="0" column="2">
-       <widget class="QLabel" name="label_4">
+       <widget class="QLabel" name="label3">
         <property name="minimumSize">
          <size>
           <width>65</width>
@@ -422,7 +422,7 @@
        </widget>
       </item>
       <item row="0" column="5">
-       <widget class="QLabel" name="label_7">
+       <widget class="QLabel" name="label6">
         <property name="minimumSize">
          <size>
           <width>65</width>
@@ -685,5 +685,102 @@
   </widget>
  </widget>
  <resources/>
- <connections/>
+ <connections>
+  <connection>
+   <sender>progressBar</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>label1</receiver>
+   <slot>setNum(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>76</x>
+     <y>216</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>76</x>
+     <y>108</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>progressBar_2</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>label2</receiver>
+   <slot>setNum(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>181</x>
+     <y>216</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>181</x>
+     <y>108</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>progressBar_3</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>label3</receiver>
+   <slot>setNum(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>286</x>
+     <y>216</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>286</x>
+     <y>108</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>progressBar_4</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>label4</receiver>
+   <slot>setNum(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>391</x>
+     <y>216</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>391</x>
+     <y>108</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>progressBar_5</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>label5</receiver>
+   <slot>setNum(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>496</x>
+     <y>216</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>496</x>
+     <y>108</y>
+    </hint>
+   </hints>
+  </connection>
+  <connection>
+   <sender>progressBar_6</sender>
+   <signal>valueChanged(int)</signal>
+   <receiver>label6</receiver>
+   <slot>setNum(int)</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>601</x>
+     <y>216</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>601</x>
+     <y>108</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
