@@ -102,7 +102,7 @@ void NodeWindow::setNewPoint(Packet &packet)
         counter++;
     }
 
-    QPointF point(Points.size() , QRandomGenerator::global()->bounded(10000));
+    QPointF point(Points.size() , packet.getValue());
     Points.append(point);
 
     this->series->clear();
