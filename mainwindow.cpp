@@ -4,8 +4,8 @@
 #include <QDateTime>
 #include <QFile>
 #include <QLayout>
-#include<QDebug>
-#include<QSqlError>
+#include <QDebug>
+#include <QSqlError>
 #include <packet.h>
 
 MainWindow::MainWindow(QWidget *parent)
@@ -227,6 +227,8 @@ void MainWindow::saveNodeSetting(Packet *packet)
 
 void MainWindow::manageNewPacket(QString packet)
 {
+    qDebug()<<"packet = "<<packet;
+
     Packet pak;
     pak.setPacket(packet);
     if(nodeWindow.isOpen() && nodeWindow.getNode()->getNode() == pak.getNode()){
