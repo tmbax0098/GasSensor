@@ -76,7 +76,7 @@ padding :0;</string>
      <widget class="QPlainTextEdit" name="plainTextEdit">
       <property name="font">
        <font>
-        <pointsize>14</pointsize>
+        <pointsize>18</pointsize>
         <weight>50</weight>
         <bold>false</bold>
        </font>

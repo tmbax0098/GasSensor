@@ -90,5 +90,5 @@ void PasswordCertificateWindow::showEvent(QShowEvent *event)
     database = QSqlDatabase::addDatabase("QSQLITE");
     database.setDatabaseName("GasSensor.db");
     bool ok = database.open();
-    qDebug()<<"database is open state : "<<ok;
+    qDebug()<<"PasswordCertificateWindow ==> database is open state : "<<ok;
 }
