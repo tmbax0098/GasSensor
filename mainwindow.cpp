@@ -227,8 +227,6 @@ void MainWindow::saveNodeSetting(Packet *packet)
 
 void MainWindow::manageNewPacket(QString packet)
 {
-    //qDebug()<<"packet = "<<packet;
-
     Packet pak;
     pak.setPacket(packet);
     if(nodeWindow.isOpen() && nodeWindow.getNode()->getNode() == pak.getNode()){

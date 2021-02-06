@@ -4,6 +4,7 @@
 #include <QFile>
 #include <QDebug>
 #include <QSqlQuery>
+#include <QSqlError>
 
 SettingPortWindow::SettingPortWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -47,19 +48,22 @@ void SettingPortWindow::closeEvent(QCloseEvent *event)
 void SettingPortWindow::showEvent(QShowEvent *event)
 {
     database = QSqlDatabase::addDatabase("QSQLITE");
-    database.setDatabaseName("ports.db");
+    database.setDatabaseName("GasSensor.db");
     bool ok = database.open();
     qDebug()<<"database is open state : "<<ok ;
 
+
     if(ok){
-        QSqlQuery query("select * from ports where 1 limit 1");
+        QSqlQuery query("SELECT * FROM ports WHERE 1");
         if(query.exec()){
-            if(query.first()){
+            if(query.next()){
                 setButtonValue(ui->pushButtonInput1,query.value(0).toInt());
                 setButtonValue(ui->pushButtonInput2,query.value(1).toInt());
                 setButtonValue(ui->pushButtonOutput,query.value(2).toInt());
                 setButtonValue(ui->pushButtonAlarm,query.value(3).toInt());
             }
+        }else{
+            qDebug()<<query.lastError().text();
         }
     }
 }
