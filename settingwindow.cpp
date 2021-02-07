@@ -1,7 +1,9 @@
 #include "settingwindow.h"
 #include "ui_settingwindow.h"
 
+#include <QFileDialog>
 #include <QFile>
+#include <QDebug>
 
 
 
@@ -51,7 +53,15 @@ void SettingWindow::on_pushButtonPorts_clicked()
 
 void SettingWindow::on_pushButton_2_clicked()
 {
-    exportWindow.showFullScreen();
+
+    QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
+                                                    "/home",
+                                                    QFileDialog::ShowDirsOnly
+                                                    | QFileDialog::DontResolveSymlinks);
+    qDebug()<<"dir : "<<dir;
+
+    //QFileDialog::ope
+    // exportWindow.showFullScreen();
 }
 
 void SettingWindow::closeEvent(QCloseEvent *event)
