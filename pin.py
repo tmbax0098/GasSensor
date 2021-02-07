@@ -16,7 +16,7 @@ import OPi.GPIO as GPIO
 
 GPIO.setboard(GPIO.PCPCPLUS)
 GPIO.setmode(GPIO.BOARD)
-GPIO.setwarnings(false)
+GPIO.setwarnings(False)
 
 def pinName (name):
 	if name == "PA10":
