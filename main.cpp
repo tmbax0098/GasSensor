@@ -9,7 +9,7 @@ int main(int argc, char *argv[])
 
 //    QThread::msleep(3000);
     QProcess process;
-    process.start("echo 12345678 | sudo python pin.py PA20 1");
+    process.start("echo 12345678 | sudo python3 pin.py PA20 1");
 //    process.start("pkexec python pin.py PA20 1");
     if(process.waitForStarted()){
         if(process.waitForFinished()){
