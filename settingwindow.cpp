@@ -55,18 +55,30 @@ void SettingWindow::on_pushButtonPorts_clicked()
 void SettingWindow::on_pushButton_2_clicked()
 {
 
-    QString destinationPath = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
+//    QFileDialog fileDialog;
+//    fileDialog.setWindowState(Qt::WindowFullScreen);
+//    fileDialog.setDirectory("/home");
+//    fileDialog.setOptions(QFileDialog::ShowDirsOnly| QFileDialog::DontResolveSymlinks);
+//    fileDialog.setWindowState(Qt::WindowFullScreen | Qt::WindowMaximized);
+//    fileDialog.exec();
+
+    //fileDialog.showFullScreen();
+
+
+
+
+    QString destinationPath = QFileDialog::getExistingDirectory(this, tr("Choose save path"),
                                                                 "/home",
                                                                 QFileDialog::ShowDirsOnly
+                                                                | QFileDialog::ReadOnly
                                                                 | QFileDialog::DontResolveSymlinks);
     if(destinationPath != ""){
         QString sourcePath = QDir::currentPath()+"/GasSensor.db";
-        //QString destinationPath =  "/media/rad/CEB2-BA58/";
         destinationPath.append("GasSensor");
         destinationPath.append(QDateTime::currentDateTime().toString("yyyyMMddhhmmss"));
         destinationPath.append(".db");
-        qDebug()<<"destinationPath = "<<destinationPath;
-        qDebug()<<"sourcePath = "<<sourcePath;
+//        qDebug()<<"destinationPath = "<<destinationPath;
+//        qDebug()<<"sourcePath = "<<sourcePath;
         if(QFile::copy(sourcePath,destinationPath)){
             emit showMessage("Data export successfully.");
         }else{
