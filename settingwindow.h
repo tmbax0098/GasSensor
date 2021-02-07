@@ -22,6 +22,8 @@ public:
 
 signals:
     void onClose();
+    void resetFactory();
+    void showMessage(QString message);
 
 private slots:
     void on_btnBack_clicked();
@@ -35,6 +37,8 @@ private slots:
     void on_pushButtonPorts_clicked();
 
     void on_pushButton_2_clicked();
+
+    void on_pushButtonResetFactory_clicked();
 
 private:
     Ui::SettingWindow *ui;

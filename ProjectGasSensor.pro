@@ -13,6 +13,7 @@ SOURCES += \
     keyboardwindow.cpp \
     main.cpp \
     mainwindow.cpp \
+    messagewindow.cpp \
     nodesetting.cpp \
     nodewindow.cpp \
     packet.cpp \
@@ -29,6 +30,7 @@ HEADERS += \
     exportwindow.h \
     keyboardwindow.h \
     mainwindow.h \
+    messagewindow.h \
     nodesetting.h \
     nodewindow.h \
     packet.h \
@@ -45,6 +47,7 @@ FORMS += \
     exportwindow.ui \
     keyboardwindow.ui \
     mainwindow.ui \
+    messagewindow.ui \
     nodewindow.ui \
     passwordcertificatewindow.ui \
     settingnodewindow.ui \

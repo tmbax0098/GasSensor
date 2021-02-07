@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QTimer>
 #include <aboutwindow.h>
+#include <messagewindow.h>
 #include <nodesetting.h>
 #include <nodewindow.h>
 #include <packet.h>
@@ -36,9 +37,17 @@ private slots:
 private:
     Ui::MainWindow *ui;
 
+    enum CertificateMode{
+        SETTING,
+        RESET_FACTORY
+    };
+
+    CertificateMode certificateMode;
+
     QTimer timer;
     QTimer timerDatabase;
 
+    MessageWindow messageWindow;
     SettingWindow settingWindow;
     AboutWindow aboutWindow;
     PasswordCertificateWindow passwordCertificateWindow;

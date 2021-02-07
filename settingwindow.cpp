@@ -5,7 +5,6 @@
 #include <QFile>
 #include <QDebug>
 #include <QDateTime>
-#include <QMessageBox>
 
 
 
@@ -66,13 +65,13 @@ void SettingWindow::on_pushButton_2_clicked()
         destinationPath.append("GasSensor");
         destinationPath.append(QDateTime::currentDateTime().toString("yyyyMMddhhmmss"));
         destinationPath.append(".db");
-        QMessageBox qmb;
+        qDebug()<<"destinationPath = "<<destinationPath;
+        qDebug()<<"sourcePath = "<<sourcePath;
         if(QFile::copy(sourcePath,destinationPath)){
-            qmb.setText("Data export successfully.");
+            emit showMessage("Data export successfully.");
         }else{
-            qmb.setText("Export failed!");
+            emit showMessage("Export failed!");
         }
-        qmb.exec();
     }
 
     //QFileDialog::ope
@@ -82,4 +81,9 @@ void SettingWindow::on_pushButton_2_clicked()
 void SettingWindow::closeEvent(QCloseEvent *event)
 {
     emit onClose();
+}
+
+void SettingWindow::on_pushButtonResetFactory_clicked()
+{
+    emit resetFactory();
 }

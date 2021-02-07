@@ -37,11 +37,51 @@ MainWindow::MainWindow(QWidget *parent)
     timer.start(1000);
 
 
-    QObject::connect(&passwordCertificateWindow, &PasswordCertificateWindow::login , &settingWindow , &SettingWindow::showFullScreen);
+    QObject::connect(&passwordCertificateWindow, &PasswordCertificateWindow::login , [=](){
+        openDatabase();
+        switch (certificateMode) {
+        case SETTING:
+            settingWindow.showFullScreen();
+            break;
+        case RESET_FACTORY:
+            if(database.isOpen()){
+                QSqlQuery query;
+                if(query.exec("DELETE FROM node WHERE 1")){
+                    query.clear();
+                    if(query.exec("UPDATE `node_setting` SET `value`=1 , `up`=10000 , `down`=0 WHERE 1")){
+                        query.clear();
+                        if(query.exec("UPDATE `ports` SET `first`=1 , `second`=1 , `output`=1 , `alarm`=1 WHERE 1")){
+                            messageWindow.showMessage("Reset factory finish!");
+                        }else{
+                            messageWindow.showMessage("ports table reset fail!");
+                        }
+                    }else{
+                        messageWindow.showMessage("node_setting table reset fail!");
+                    }
+                }else{
+                    messageWindow.showMessage("node table reset fail!");
+                }
+            }else{
+                messageWindow.showMessage("databse connection fail!");
+            }
+            break;
+        }
+    });
     QObject::connect(&passwordCertificateWindow, &PasswordCertificateWindow::login, &passwordCertificateWindow , &PasswordCertificateWindow::close);
 
     QObject::connect(&nodeWindow , &NodeWindow::loadArchive,this , &MainWindow::getNodeArchive);
     QObject::connect(&nodeWindow , &NodeWindow::saveNodeSetting,this , &MainWindow::saveNodeSetting);
+
+
+    QObject::connect(&settingWindow , &SettingWindow::resetFactory , [=](){
+
+        certificateMode = RESET_FACTORY;
+        passwordCertificateWindow.reset();
+        passwordCertificateWindow.showFullScreen();
+
+    });
+
+    QObject::connect(&settingWindow , &SettingWindow::showMessage ,&messageWindow , &MessageWindow::showMessage);
 
 
     QObject::connect(ui->pushButtonNode1 , &QPushButton::clicked ,[=](){
@@ -113,6 +153,7 @@ void MainWindow::on_btnSetting_clicked()
 {
     QCloseEvent *event;
     closeEvent(event);
+    certificateMode = SETTING;
     passwordCertificateWindow.reset();
     passwordCertificateWindow.showFullScreen();
 }

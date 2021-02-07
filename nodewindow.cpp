@@ -141,6 +141,8 @@ void NodeWindow::setArchive(QList<QPointF> list)
 
     enableRadioButtons();
 
+    emit ui->radioButtonHour->setChecked(true);
+
 }
 
 void NodeWindow::setKeyboardResult(QString value)
