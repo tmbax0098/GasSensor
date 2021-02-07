@@ -10,7 +10,7 @@ int main(int argc, char *argv[])
 //    QThread::msleep(3000);
     QProcess process;
 //    process.start("echo tmbax0098 | sudo python pin.py PD14 0");
-    process.start("echo tmbax0098 | sudo python pin.py PA20 0");
+    process.start("pkexec python pin.py PA20 1");
     process.waitForStarted();
 
     QApplication a(argc, argv);
