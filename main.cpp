@@ -1,25 +1,21 @@
 #include "mainwindow.h"
 
 #include <QApplication>
-#include <QProcess>
-//#include <QThread>
+//#include <QProcess>
 
 int main(int argc, char *argv[])
 {
-
-//    QThread::msleep(3000);
-    QProcess process;
-    process.start("echo 12345678 | sudo python3 /home/koorosh/GasSensor/pin.py PA20 1");
-//    process.start("pkexec python pin.py PA20 1");
-    if(process.waitForStarted(3000)){
-        if(process.waitForFinished(5000)){
-            qDebug()<<"proccess finish shod :D";
-        } else{
-            qDebug()<<"proccess finish nashod!";
-        }
-    }else{
-        qDebug()<<"proccess start nashod!";
-    }
+//    QProcess process;
+//    process.start("echo 12345678 | sudo python3 /home/koorosh/GasSensor/pin.py PA20 1");
+//    if(process.waitForStarted(3000)){
+//        if(process.waitForFinished(5000)){
+//            qDebug()<<"proccess finish shod :D";
+//        } else{
+//            qDebug()<<"proccess finish nashod!";
+//        }
+//    }else{
+//        qDebug()<<"proccess start nashod!";
+//    }
 
     QApplication a(argc, argv);
     MainWindow w;
