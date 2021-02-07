@@ -4,6 +4,8 @@
 #include <QFileDialog>
 #include <QFile>
 #include <QDebug>
+#include <QDateTime>
+#include <QMessageBox>
 
 
 
@@ -54,11 +56,24 @@ void SettingWindow::on_pushButtonPorts_clicked()
 void SettingWindow::on_pushButton_2_clicked()
 {
 
-    QString dir = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
-                                                    "/home",
-                                                    QFileDialog::ShowDirsOnly
-                                                    | QFileDialog::DontResolveSymlinks);
-    qDebug()<<"dir : "<<dir;
+    QString destinationPath = QFileDialog::getExistingDirectory(this, tr("Open Directory"),
+                                                                "/home",
+                                                                QFileDialog::ShowDirsOnly
+                                                                | QFileDialog::DontResolveSymlinks);
+    if(destinationPath != ""){
+        QString sourcePath = QDir::currentPath()+"/GasSensor.db";
+        //QString destinationPath =  "/media/rad/CEB2-BA58/";
+        destinationPath.append("GasSensor");
+        destinationPath.append(QDateTime::currentDateTime().toString("yyyyMMddhhmmss"));
+        destinationPath.append(".db");
+        QMessageBox qmb;
+        if(QFile::copy(sourcePath,destinationPath)){
+            qmb.setText("Data export successfully.");
+        }else{
+            qmb.setText("Export failed!");
+        }
+        qmb.exec();
+    }
 
     //QFileDialog::ope
     // exportWindow.showFullScreen();
