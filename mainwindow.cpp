@@ -184,6 +184,10 @@ void MainWindow::saveRecord(Packet &packet)
         if(packet.getValid() && !packet.getSaved()){
             query.exec(packet.getQueryCommand());
         }
+        QDateTime dt = QDateTime::currentDateTime();
+        dt = dt.addSecs(-24*60*60);
+        query.clear();
+        query.exec("DELETE FROM `node` WHERE `datetime` < \'" + dt.toString("yyyy-MM-dd HH:mm:ss") +"\'");
     }
 }
 
