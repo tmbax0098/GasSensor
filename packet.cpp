@@ -67,6 +67,7 @@ void Packet::setPacket(QString packet)
         this->alarmOn();
     }else{
         warning = false;
+        this->alarmOff();
     }
 }
 

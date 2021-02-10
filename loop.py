@@ -4,23 +4,23 @@ from time import sleep
 from pyA20.gpio import gpio
 from pyA20.gpio import port
 
-global rootFolder = "/home/koorosh/files"
+rootFolder = "/home/koorosh/files"
 
 def readFile(filePath):
 	f=open(filePath , "r")
-	line =f.readLine()
+	line =f.readlines()
 	f.close()
-	return line
+	return line[0]
 
 def removeFile(filePath):
 	os.remove(filePath);
 
 def getFileList(path = "/"):
-	list = []
-    for file in os.listdir(path):
-        if file.endswith(".txt"):
+        list = []
+        for file in os.listdir(path):
+            #if file.endswith(".txt"):
             list.append(os.path.join(path, file))
-	retrun list
+        return list
 
 def pinName (name):
 	if name == "PA10":
@@ -73,13 +73,14 @@ def runCommand(argv):
 		return ErrorMessage
 
 def run():
-	while True:
-		runCommand(["PD14" , "1"])
-		sleep(0.2)
-		list = getFileList(rootFolder)
-		for path in list:
-			execFile(path)
-		sleep(0.4)
+        global rootFolder
+        while True:
+              runCommand(["PD14" , "0"])
+              sleep(0.2)
+              list = getFileList(rootFolder)
+              for path in list:
+                  execFile(path)
+              sleep(0.4)
 
 
 run()
