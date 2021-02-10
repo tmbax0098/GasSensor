@@ -59,8 +59,8 @@ private:
     QString filePath = "/home/koorosh/files/";
     void createFile(QString data);
 
-    int min;
-    int max;
+    int min = 0;
+    int max = 10000;
 
     QProcess process;
 };
