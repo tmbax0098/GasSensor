@@ -5,6 +5,7 @@
 #include <QFile>
 #include <QDebug>
 #include <QDateTime>
+#include <QStorageInfo>
 
 
 
@@ -55,39 +56,30 @@ void SettingWindow::on_pushButtonPorts_clicked()
 void SettingWindow::on_pushButton_2_clicked()
 {
 
-//    QFileDialog fileDialog;
-//    fileDialog.setWindowState(Qt::WindowFullScreen);
-//    fileDialog.setDirectory("/home");
-//    fileDialog.setOptions(QFileDialog::ShowDirsOnly| QFileDialog::DontResolveSymlinks);
-//    fileDialog.setWindowState(Qt::WindowFullScreen | Qt::WindowMaximized);
-//    fileDialog.exec();
+    QString sourcePath = QDir::currentPath()+"/GasSensor.db";
 
-    //fileDialog.showFullScreen();
+    QFile source(sourcePath);
+    if(source.exists()){
 
+        foreach (const QStorageInfo &storage, QStorageInfo::mountedVolumes()) {
+            if (storage.isReadOnly()){
+                 emit showMessage("Drive is readonly!");
+            }else{
+                QString destinationPath = storage.rootPath();
+                destinationPath.append("/GasSensor_");
+                destinationPath.append(QDateTime::currentDateTime().toString("yyyyMMddhhmmss"));
+                destinationPath.append(".db");
 
-
-
-    QString destinationPath = QFileDialog::getExistingDirectory(this, tr("Choose save path"),
-                                                                "/home",
-                                                                QFileDialog::ShowDirsOnly
-                                                                | QFileDialog::ReadOnly
-                                                                | QFileDialog::DontResolveSymlinks);
-    if(destinationPath != ""){
-        QString sourcePath = QDir::currentPath()+"/GasSensor.db";
-        destinationPath.append("GasSensor");
-        destinationPath.append(QDateTime::currentDateTime().toString("yyyyMMddhhmmss"));
-        destinationPath.append(".db");
-//        qDebug()<<"destinationPath = "<<destinationPath;
-//        qDebug()<<"sourcePath = "<<sourcePath;
-        if(QFile::copy(sourcePath,destinationPath)){
-            emit showMessage("Data export successfully.");
-        }else{
-            emit showMessage("Export failed!");
+                if(QFile::copy(sourcePath,destinationPath)){
+                    emit showMessage("Data export successfully.");
+                }else{
+                    emit showMessage("Export failed!");
+                }
+            }
         }
+    }else{
+        emit showMessage("Source is not exist!");
     }
-
-    //QFileDialog::ope
-    // exportWindow.showFullScreen();
 }
 
 void SettingWindow::closeEvent(QCloseEvent *event)
