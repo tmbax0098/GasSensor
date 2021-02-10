@@ -1,5 +1,6 @@
 #include "packet.h"
 #include<QDebug>
+#include <QFile>
 
 Packet::Packet(QObject *parent)
 {
@@ -42,10 +43,7 @@ void Packet::setValid(bool value)
 
 void Packet::setPacket(QString packet)
 {
-    
-        //qDebug()<<"packet.length() >=4 : "<<packet.length() ;
-        //qDebug()<<"packet.left(2) : "<<packet.left(2);
-    
+
     if(packet.length() >=4 && packet.left(2) == "$N"){
         node = packet.mid(2,1).toShort();
         value = packet.mid(3,packet.length() - 1).toDouble();
@@ -66,15 +64,10 @@ void Packet::setPacket(QString packet)
 
     if(value < min || value > max){
         warning = true;
-        //this->alarmOn();
+        this->alarmOn();
     }else{
         warning = false;
     }
-
-    //qDebug()<<"VALUe : "<<value;
-
-
-
 }
 
 QString Packet::getQueryCommand()
@@ -115,22 +108,20 @@ bool Packet::getWarning() const
 
 void Packet::alarmOff()
 {
-    QProcess process;
-    process.start("echo 12345678 | python pin.py PA20 0");
-    process.waitForStarted();
+   createFile("PA20 0");
 }
 
 void Packet::alarmOn()
 {
-    QProcess process;
-    process.start("echo 12345678 | python pin.py PA20 1");
-    process.waitForStarted();
+    createFile("PA20 1");
 }
 
-//QPointF Packet::getPoint()
-//{
-//    QPoint point;
-
-//    return *point;
-//    //return new ();
-//}
+void Packet::createFile(QString data)
+{
+    QFile file(filePath + QDateTime::currentDateTime().toString("yyyyMMddhhmmss"));
+    if (file.open(QIODevice::ReadWrite)) {
+        QTextStream stream(&file);
+        stream << data << endl;
+        file.close();
+    }
+}

@@ -56,6 +56,8 @@ private:
 
     void alarmOn();
 
+    QString filePath = "/home/koorosh/files/";
+    void createFile(QString data);
 
     int min;
     int max;
