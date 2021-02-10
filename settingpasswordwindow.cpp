@@ -5,6 +5,7 @@
 #include<QDebug>
 #include <QSqlQuery>
 #include <QSqlError>
+#include <QDir>
 
 SettingPasswordWindow::SettingPasswordWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -135,7 +136,7 @@ void SettingPasswordWindow::openKeyBoard(int mode){
 void SettingPasswordWindow::showEvent(QShowEvent *event)
 {
     database = QSqlDatabase::addDatabase("QSQLITE");
-    database.setDatabaseName("GasSensor.db");
+    database.setDatabaseName(QDir::currentPath()+"/GasSensor.db");
     bool ok = database.open();
     qDebug()<<"setting password window database is open state : " << ok;
 }

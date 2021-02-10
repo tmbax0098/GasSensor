@@ -166,7 +166,7 @@ void MainWindow::on_btnAbout_clicked()
 void MainWindow::openDatabase()
 {
     database = QSqlDatabase::addDatabase("QSQLITE");
-    database.setDatabaseName("GasSensor.db");
+    database.setDatabaseName(QDir::currentPath()+ "/GasSensor.db");
     bool ok = database.open();
     qDebug()<<"openDatabase ==> database is open state : "<<ok ;
 }

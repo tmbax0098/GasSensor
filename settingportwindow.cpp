@@ -5,6 +5,7 @@
 #include <QDebug>
 #include <QSqlQuery>
 #include <QSqlError>
+#include <QDir>
 
 SettingPortWindow::SettingPortWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -48,7 +49,7 @@ void SettingPortWindow::closeEvent(QCloseEvent *event)
 void SettingPortWindow::showEvent(QShowEvent *event)
 {
     database = QSqlDatabase::addDatabase("QSQLITE");
-    database.setDatabaseName("GasSensor.db");
+    database.setDatabaseName(QDir::currentPath()+"/GasSensor.db");
     bool ok = database.open();
     qDebug()<<"database is open state : "<<ok ;
 

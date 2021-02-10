@@ -5,6 +5,7 @@
 #include<QDebug>
 #include <QSqlQuery>
 #include <QSqlError>
+#include <QDir>
 
 SettingNodeWindow::SettingNodeWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -17,13 +18,6 @@ SettingNodeWindow::SettingNodeWindow(QWidget *parent) :
     QString StyleSheet = QLatin1String(File.readAll());
 
     this->setStyleSheet(StyleSheet);
-
-
-    //    database = QSqlDatabase::addDatabase("QSQLITE");
-    //    database.setDatabaseName("GasSensor.db");
-    //    bool ok = database.open();
-    //    qDebug()<<"database is open state : " << ok;
-
 
 
 //    QSqlQuery query("select * from node_setting where 1");
@@ -94,7 +88,7 @@ void SettingNodeWindow::toggleButtonStatus(QPushButton *btn)
 void SettingNodeWindow::showEvent(QShowEvent *event)
 {
     database = QSqlDatabase::addDatabase("QSQLITE");
-    database.setDatabaseName("GasSensor.db");
+    database.setDatabaseName(QDir::currentPath()+"/GasSensor.db");
     bool ok = database.open();
     qDebug()<<"database is open state : " + this->windowTitle() + " ===> " << ok;
 

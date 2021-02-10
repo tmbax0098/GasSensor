@@ -4,6 +4,7 @@
 #include <QFile>
 #include <QSqlQuery>
 #include <QSqlError>
+#include <QDir>
 
 
 PasswordCertificateWindow::PasswordCertificateWindow(QWidget *parent) :
@@ -88,7 +89,7 @@ void PasswordCertificateWindow::closeEvent(QCloseEvent *event)
 void PasswordCertificateWindow::showEvent(QShowEvent *event)
 {
     database = QSqlDatabase::addDatabase("QSQLITE");
-    database.setDatabaseName("GasSensor.db");
+    database.setDatabaseName(QDir::currentPath()+"/GasSensor.db");
     bool ok = database.open();
     qDebug()<<"PasswordCertificateWindow ==> database is open state : "<<ok;
 }
