@@ -24,10 +24,10 @@ def getFileList(path = "/"):
 
 def readSettingFile():
     line = readFile(rootFolder + "/setting.txt").split(" ")
-	list = []
-	for item in line :
-		list.append(item === "1" ? True : False)
-	return list
+    list = []
+    for item in line :
+        list.append(item === "1" ? True : False)
+    return list
 
 def pinName (name):
 	if name == "PA10":
