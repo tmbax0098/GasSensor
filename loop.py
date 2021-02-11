@@ -13,14 +13,21 @@ def readFile(filePath):
 	return line[0]
 
 def removeFile(filePath):
-	os.remove(filePath);
+	os.remove(filePath)
 
 def getFileList(path = "/"):
-        list = []
-        for file in os.listdir(path):
-            #if file.endswith(".txt"):
+    list = []
+    for file in os.listdir(path):
+        if !file.endswith(".txt"):
             list.append(os.path.join(path, file))
-        return list
+    return list
+
+def readSettingFile():
+    line = readFile(rootFolder + "/setting.txt").split(" ")
+	list = []
+	for item in line :
+		list.append(item === "1" ? True : False)
+	return list
 
 def pinName (name):
 	if name == "PA10":
@@ -40,10 +47,11 @@ def pinName (name):
 	else:
 		return 0
 
-def execFile(path):
-	line = readFile(path)
-	line = line.split(" ")
-	runCommand(line)
+def execFile(path , flag = False):
+	if flag :
+		line = readFile(path)
+		line = line.split(" ")
+		runCommand(line)
 	removeFile(path)
 
 
@@ -58,13 +66,13 @@ def runCommand(argv):
 		else:
 			pin = pinName(argv[0])
 			if int(argv[1]) == 2 :
-				gpio.setcfg(pin, GPIO.INPUT)
+				gpio.setcfg(pin, gpio.INPUT)
 				status= gpio.input(pin)
 				return status
 			elif int(argv[1]) == 1 or int(argv[1]) == 0:
 				gpio.setcfg(pin, gpio.OUTPUT)
 				gpio.output(pin, int(argv[1]))
-				return "OK"
+				return True
 			else:
 				return ErrorMessage
 
@@ -72,14 +80,28 @@ def runCommand(argv):
 		#print ("Goodbye.")
 		return ErrorMessage
 
+
+def manageOutput(setting):
+	if setting[2]:
+		if setting[0] && runCommand(["PA7" , "2"]) === 1:
+			runCommand(["PC7" , "1"])
+		if setting[1] && unCommand(["PA7" , "2"]) === 1:
+			runCommand(["PC7" , "1"])
+		else:
+			runCommand(["PC7" , "0"])
+
+
 def run():
         global rootFolder
         while True:
               runCommand(["PD14" , "0"])
-              sleep(0.2)
+			  setting = readSettingFile()
+			  manageOutput(setting)
+
+              sleep(0.3)
               list = getFileList(rootFolder)
               for path in list:
-                  execFile(path)
+                  execFile(path , setting[3])
               sleep(0.4)
 
 

@@ -193,6 +193,7 @@ void MainWindow::loadNodeSetting()
                     input2 = query.value(1).toInt();
                     output = query.value(2).toInt();
                     alarm = query.value(3).toInt();
+                    pinManager.createSettingFile(input1 , input2 ,output , alarm);
                 }
             }
         }else{
