@@ -85,7 +85,7 @@ def manageOutput(setting):
 	if setting[2]:
 		if setting[0] and runCommand(["PA7" , "2"]) == 1:
 			runCommand(["PC7" , "1"])
-		if setting[1] and unCommand(["PA7" , "2"]) == 1:
+		if setting[1] and runCommand(["PA7" , "2"]) == 1:
 			runCommand(["PC7" , "1"])
 		else:
 			runCommand(["PC7" , "0"])
