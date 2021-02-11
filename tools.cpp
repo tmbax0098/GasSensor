@@ -1,6 +1,8 @@
 #include "tools.h"
 
 #include <QSqlQuery>
+#include <QDir>
+#include <QDebug>
 
 Tools::Tools(QObject *parent) : QObject(parent)
 {
@@ -16,6 +18,9 @@ QSqlDatabase Tools::openDatabase()
 {
     QSqlDatabase database = QSqlDatabase::addDatabase("QSQLITE");
     database.setDatabaseName(getDbPath());
+    qDebug()<<"database status : "<<database.isOpen();
+    qDebug()<<"current : "<<QDir::currentPath();
+    qDebug()<<"database path : "<<getDbPath();
     return database;
 }
 
