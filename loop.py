@@ -26,7 +26,7 @@ def readSettingFile():
     line = readFile(rootFolder + "/setting.txt").split(" ")
     list = []
     for item in line :
-        list.append(item === "1" ? True : False)
+        list.append(item == "1" ? True : False)
     return list
 
 def pinName (name):
