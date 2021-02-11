@@ -299,7 +299,7 @@ void MainWindow::saveNodeSetting(Packet *packet)
 void MainWindow::manageNewPacket(QString packet)
 {
 
-    qDebug()<<"new packet ==> "<<packet;
+//    qDebug()<<"new packet ==> "<<packet;
 
     Packet pak;
     pak.setPacket(packet);
