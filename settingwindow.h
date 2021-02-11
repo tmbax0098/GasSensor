@@ -50,7 +50,6 @@ private:
     SettingNodeWindow settingNodeWindow;
     SettingPasswordWindow settingPasswordWindow;
     SettingPortWindow settingPortWindow;
-//    ExportWindow exportWindow;
 
     // QWidget interface
 protected:

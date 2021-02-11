@@ -35,16 +35,27 @@ SettingTimeWindow::~SettingTimeWindow()
 void SettingTimeWindow::on_pushButtonSetTime_clicked()
 {
 
-    // ui->labelMessage->setText("");
-
     QString hour = QString::number(ui->horizontalSliderHour->value());
     QString minute =QString::number(ui->horizontalSliderMinute->value());
-    // QString second = QString::number(ui->horizontalSliderSecond->value());
 
     QString time  = hour + ":" + minute ;
 
-    //  ui->labelMessage->setText("Time set successfully!");
+    QString dateTimeString ("date -s ");
+    dateTimeString.append(time);
+    int systemDateTimeStatus= system(dateTimeString.toStdString().c_str());
+    if (systemDateTimeStatus == -1)
+    {
+        emit showMessage("Failed to change date time!");
+    }else{
+        int systemHwClockStatus = system("/sbin/hwclock -w");
+        if (systemHwClockStatus == -1 )
+        {
+            emit showMessage("ailed to sync hardware clock");
+        }else{
+            emit showMessage("Time changed successfully.");
+        }
 
+    }
 }
 
 QString SettingTimeWindow::format(int value)

@@ -18,9 +18,7 @@ QSqlDatabase Tools::openDatabase()
 {
     QSqlDatabase database = QSqlDatabase::addDatabase("QSQLITE");
     database.setDatabaseName(getDbPath());
-    qDebug()<<"database status : "<<database.isOpen();
-    qDebug()<<"current : "<<QDir::currentPath();
-    qDebug()<<"database path : "<<getDbPath();
+    database.open();
     return database;
 }
 
@@ -48,7 +46,7 @@ QString Tools::resetFactory()
                     message = ("ports table reset fail!");
                 }
             }else{
-               message =("node_setting table reset fail!");
+                message =("node_setting table reset fail!");
             }
         }else{
             message =("node table reset fail!");

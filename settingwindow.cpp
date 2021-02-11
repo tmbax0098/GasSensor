@@ -21,6 +21,10 @@ SettingWindow::SettingWindow(QWidget *parent) :
 
     this->setStyleSheet(StyleSheet);
 
+    QObject::connect(&settingTimeWindow , &SettingTimeWindow::showMessage ,[=](QString message){
+        emit showMessage(message);
+    });
+
 }
 
 SettingWindow::~SettingWindow()

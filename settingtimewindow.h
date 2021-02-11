@@ -15,6 +15,9 @@ public:
     explicit SettingTimeWindow(QWidget *parent = nullptr);
     ~SettingTimeWindow();
 
+signals:
+    void showMessage(QString message);
+
 private slots:
     void on_pushButtonSetTime_clicked();
 
