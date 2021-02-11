@@ -18,7 +18,7 @@ def removeFile(filePath):
 def getFileList(path = "/"):
     list = []
     for file in os.listdir(path):
-        if !file.endswith(".txt"):
+        if file.endswith(".txt") == False:
             list.append(os.path.join(path, file))
     return list
 
