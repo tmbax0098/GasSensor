@@ -9,7 +9,6 @@ CONFIG += c++11
 
 SOURCES += \
     aboutwindow.cpp \
-    exportwindow.cpp \
     keyboardwindow.cpp \
     main.cpp \
     mainwindow.cpp \
@@ -18,16 +17,17 @@ SOURCES += \
     nodewindow.cpp \
     packet.cpp \
     passwordcertificatewindow.cpp \
+    pinmanager.cpp \
     portmanager.cpp \
     settingnodewindow.cpp \
     settingpasswordwindow.cpp \
     settingportwindow.cpp \
     settingtimewindow.cpp \
-    settingwindow.cpp
+    settingwindow.cpp \
+    tools.cpp
 
 HEADERS += \
     aboutwindow.h \
-    exportwindow.h \
     keyboardwindow.h \
     mainwindow.h \
     messagewindow.h \
@@ -35,16 +35,17 @@ HEADERS += \
     nodewindow.h \
     packet.h \
     passwordcertificatewindow.h \
+    pinmanager.h \
     portmanager.h \
     settingnodewindow.h \
     settingpasswordwindow.h \
     settingportwindow.h \
     settingtimewindow.h \
-    settingwindow.h
+    settingwindow.h \
+    tools.h
 
 FORMS += \
     aboutwindow.ui \
-    exportwindow.ui \
     keyboardwindow.ui \
     mainwindow.ui \
     messagewindow.ui \

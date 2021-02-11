@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QSqlDatabase>
 #include <keyboardwindow.h>
+#include <tools.h>
 
 namespace Ui {
 class SettingPasswordWindow;
@@ -29,6 +30,7 @@ private slots:
 private:
     Ui::SettingPasswordWindow *ui;
 
+    Tools tools;
     QSqlDatabase database;
     KeyboardWindow keyboardWindow ;
     void closeAllconnection();

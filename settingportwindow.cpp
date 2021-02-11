@@ -36,25 +36,34 @@ void SettingPortWindow::setButtonValue(QPushButton *btn, int value)
     }
 }
 
+void SettingPortWindow::updateValue(QString fieldName, int fieldIndex, QPushButton *button)
+{
+    QSqlQuery query("select * from ports where 1 limit 1");
+    if(query.exec()){
+        if(query.first()){
+            int value = query.value(fieldIndex).toInt();
+            if(value > 0){
+                value = 0;
+            }else{
+                value = 1;
+            }
+            setButtonValue(button,value);
+            query.exec("update ports set "+fieldName+"=" + QString::number(value));
+        }
+    }
+}
+
 void SettingPortWindow::closeEvent(QCloseEvent *event)
 {
     database.close();
-    QStringList list = QSqlDatabase::connectionNames();
-    foreach (QString name,list) {
-        qDebug()<<"Connection closed! "<<name;
-        QSqlDatabase::removeDatabase(name);
-    }
+    tools.closeAllConnections();
 }
 
 void SettingPortWindow::showEvent(QShowEvent *event)
 {
-    database = QSqlDatabase::addDatabase("QSQLITE");
-    database.setDatabaseName(QDir::currentPath()+"/GasSensor.db");
-    bool ok = database.open();
-    qDebug()<<"database is open state : "<<ok ;
+    database =tools.openDatabase();
 
-
-    if(ok){
+    if(database.isOpen()){
         QSqlQuery query("SELECT * FROM ports WHERE 1");
         if(query.exec()){
             if(query.next()){
@@ -71,68 +80,20 @@ void SettingPortWindow::showEvent(QShowEvent *event)
 
 void SettingPortWindow::on_pushButtonInput1_clicked()
 {
-    QSqlQuery query("select * from ports where 1 limit 1");
-    if(query.exec()){
-        if(query.first()){
-            int value = query.value(0).toInt();
-            if(value > 0){
-                value = 0;
-            }else{
-                value = 1;
-            }
-            setButtonValue(ui->pushButtonInput1,value);
-            query.exec("update ports set first=" + QString::number(value));
-        }
-    }
+    updateValue("first" , 0,ui->pushButtonInput1);
 }
 
 void SettingPortWindow::on_pushButtonInput2_clicked()
 {
-    QSqlQuery query("select * from ports where 1 limit 1");
-    if(query.exec()){
-        if(query.first()){
-            int value = query.value(1).toInt();
-            if(value > 0){
-                value = 0;
-            }else{
-                value = 1;
-            }
-            setButtonValue(ui->pushButtonInput2,value);
-            query.exec("update ports set second=" + QString::number(value));
-        }
-    }
+    updateValue("second" , 1,ui->pushButtonInput2);
 }
 
 void SettingPortWindow::on_pushButtonAlarm_clicked()
 {
-    QSqlQuery query("select * from ports where 1 limit 1");
-    if(query.exec()){
-        if(query.first()){
-            int value = query.value(3).toInt();
-            if(value > 0){
-                value = 0;
-            }else{
-                value = 1;
-            }
-            setButtonValue(ui->pushButtonAlarm,value);
-            query.exec("update ports set alarm=" + QString::number(value));
-        }
-    }
+    updateValue("alarm" , 3,ui->pushButtonAlarm);
 }
 
 void SettingPortWindow::on_pushButtonOutput_clicked()
 {
-    QSqlQuery query("select * from ports where 1 limit 1");
-    if(query.exec()){
-        if(query.first()){
-            int value = query.value(2).toInt();
-            if(value > 0){
-                value = 0;
-            }else{
-                value = 1;
-            }
-            setButtonValue(ui->pushButtonOutput,value);
-            query.exec("update ports set output=" + QString::number(value));
-        }
-    }
+    updateValue("output" , 2,ui->pushButtonOutput);
 }

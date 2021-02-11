@@ -1,6 +1,8 @@
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
+#include "tools.h"
+
 #include <QMainWindow>
 #include <QTimer>
 #include <aboutwindow.h>
@@ -9,6 +11,7 @@
 #include <nodewindow.h>
 #include <packet.h>
 #include <passwordcertificatewindow.h>
+#include <pinmanager.h>
 #include <portmanager.h>
 #include <settingwindow.h>
 
@@ -47,6 +50,8 @@ private:
     QTimer timer;
     QTimer timerDatabase;
 
+    Tools tools;
+    PinManager pinManager;
     MessageWindow messageWindow;
     SettingWindow settingWindow;
     AboutWindow aboutWindow;
@@ -57,6 +62,7 @@ private:
 
     void openDatabase();
     void loadNodeSetting();
+    void manageAlarm();
 
     Packet packet_1;
     Packet packet_2;
@@ -65,7 +71,13 @@ private:
     Packet packet_5;
     Packet packet_6;
 
+    bool input1= false;
+    bool input2= false;
+    bool output= false;
+    bool alarm= false;
+
     void saveRecord(Packet &packet);
+    void removeOldRecords();
     void getNodeArchive(int node);
     void saveNodeSetting(Packet *packet);
 

@@ -63,11 +63,7 @@ void PasswordCertificateWindow::on_btnCertificate_clicked()
 void PasswordCertificateWindow::closeAllconnection()
 {
     database.close();
-    QStringList list = QSqlDatabase::connectionNames();
-    foreach (QString name,list) {
-        qDebug()<<"Connection closed! "<<name;
-        QSqlDatabase::removeDatabase(name);
-    }
+    tools.closeAllConnections();
 }
 
 QSqlDatabase PasswordCertificateWindow::getDatabase() const
@@ -88,8 +84,5 @@ void PasswordCertificateWindow::closeEvent(QCloseEvent *event)
 
 void PasswordCertificateWindow::showEvent(QShowEvent *event)
 {
-    database = QSqlDatabase::addDatabase("QSQLITE");
-    database.setDatabaseName(QDir::currentPath()+"/GasSensor.db");
-    bool ok = database.open();
-    qDebug()<<"PasswordCertificateWindow ==> database is open state : "<<ok;
+    database = tools.openDatabase();
 }

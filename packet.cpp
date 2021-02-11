@@ -64,10 +64,8 @@ void Packet::setPacket(QString packet)
 
     if(value < min || value > max){
         warning = true;
-        this->alarmOn();
     }else{
         warning = false;
-        this->alarmOff();
     }
 }
 
@@ -105,24 +103,4 @@ void Packet::setMax(int value)
 bool Packet::getWarning() const
 {
     return warning;
-}
-
-void Packet::alarmOff()
-{
-   createFile("PA20 0");
-}
-
-void Packet::alarmOn()
-{
-    createFile("PA20 1");
-}
-
-void Packet::createFile(QString data)
-{
-    QFile file(filePath + QDateTime::currentDateTime().toString("yyyyMMddhhmmss"));
-    if (file.open(QIODevice::ReadWrite)) {
-        QTextStream stream(&file);
-        stream << data << endl;
-        file.close();
-    }
 }

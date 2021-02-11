@@ -33,37 +33,20 @@ MainWindow::MainWindow(QWidget *parent)
     timer.setInterval(1000);
     QObject::connect(&timer , &QTimer::timeout , [=](){
         ui->lblTime->setText(QDateTime::currentDateTime().time().toString());
+        manageAlarm();
     });
     timer.start(1000);
 
 
     QObject::connect(&passwordCertificateWindow, &PasswordCertificateWindow::login , [=](){
-        openDatabase();
         switch (certificateMode) {
         case SETTING:
+            database = tools.openDatabase();
             settingWindow.showFullScreen();
             break;
         case RESET_FACTORY:
-            if(database.isOpen()){
-                QSqlQuery query;
-                if(query.exec("DELETE FROM node WHERE 1")){
-                    query.clear();
-                    if(query.exec("UPDATE `node_setting` SET `value`=1 , `up`=10000 , `down`=0 WHERE 1")){
-                        query.clear();
-                        if(query.exec("UPDATE `ports` SET `first`=1 , `second`=1 , `output`=1 , `alarm`=1 WHERE 1")){
-                            messageWindow.showMessage("Reset factory finish!");
-                        }else{
-                            messageWindow.showMessage("ports table reset fail!");
-                        }
-                    }else{
-                        messageWindow.showMessage("node_setting table reset fail!");
-                    }
-                }else{
-                    messageWindow.showMessage("node table reset fail!");
-                }
-            }else{
-                messageWindow.showMessage("databse connection fail!");
-            }
+            messageWindow.showMessage(tools.resetFactory());
+            database = tools.openDatabase();
             break;
         }
     });
@@ -109,7 +92,6 @@ MainWindow::MainWindow(QWidget *parent)
         nodeWindow.showFullScreen();
     });
 
-    openDatabase();
     loadNodeSetting();
 
     //when packet recieved
@@ -117,11 +99,10 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     QObject::connect(&settingWindow , &SettingWindow::onClose , [=](){
-        openDatabase();
         loadNodeSetting();
     });
 
-    timerDatabase.setInterval(2000);
+    timerDatabase.setInterval(tools.getSaveTimer());
     QObject::connect(&timerDatabase , &QTimer::timeout , [=](){
         saveRecord(packet_1);
         saveRecord(packet_2);
@@ -129,8 +110,9 @@ MainWindow::MainWindow(QWidget *parent)
         saveRecord(packet_4);
         saveRecord(packet_5);
         saveRecord(packet_6);
+        removeOldRecords();
     });
-    timerDatabase.start(60000);
+    timerDatabase.start();
 
 }
 
@@ -142,11 +124,7 @@ MainWindow::~MainWindow()
 void MainWindow::closeEvent(QCloseEvent *event)
 {
     database.close();
-    QStringList list = QSqlDatabase::connectionNames();
-    foreach (QString name,list) {
-        qDebug()<<"Connection closed! "<<name;
-        QSqlDatabase::removeDatabase(name);
-    }
+    tools.closeAllConnections();
 }
 
 void MainWindow::on_btnSetting_clicked()
@@ -163,16 +141,11 @@ void MainWindow::on_btnAbout_clicked()
     aboutWindow.showFullScreen();
 }
 
-void MainWindow::openDatabase()
-{
-    database = QSqlDatabase::addDatabase("QSQLITE");
-    database.setDatabaseName(QDir::currentPath()+ "/GasSensor.db");
-    bool ok = database.open();
-    qDebug()<<"openDatabase ==> database is open state : "<<ok ;
-}
-
 void MainWindow::loadNodeSetting()
 {
+    if(!database.isOpen()){
+        database = tools.openDatabase();
+    }
     if(database.isOpen()){
         QSqlQuery query;
         if(query.exec("select * from node_setting where 1")){
@@ -212,9 +185,56 @@ void MainWindow::loadNodeSetting()
                     break;
                 }
             }
+
+            query.clear();
+            if(query.exec("SELECT * FROM ports WHERE 1")){
+                if(query.next()){
+                    input1 = query.value(0).toInt();
+                    input2 = query.value(1).toInt();
+                    output = query.value(2).toInt();
+                    alarm = query.value(3).toInt();
+                }
+            }
         }else{
             qDebug()<<query.lastError().text()<<endl<<query.executedQuery();
         }
+    }
+}
+
+void MainWindow::manageAlarm()
+{
+    bool p1 =false;
+    bool p2=false;
+    bool p3=false;
+    bool p4=false;
+    bool p5=false;
+    bool p6=false;
+    if(packet_1.getValid() && packet_1.getWarning()){
+        p1 = true;
+    }
+    if(packet_2.getValid() && packet_2.getWarning()){
+        p2 = true;
+    }
+    if(packet_3.getValid() && packet_3.getWarning()){
+        p3 = true;
+    }
+    if(packet_4.getValid() && packet_4.getWarning()){
+        p4 = true;
+    }
+    if(packet_5.getValid() && packet_5.getWarning()){
+        p5 = true;
+    }
+    if(packet_6.getValid() && packet_6.getWarning()){
+        p6 = true;
+    }
+    if(alarm){
+        if(p1 || p2 || p3 || p4 || p5 || p6){
+            pinManager.alarmOn();
+        }else{
+            pinManager.alarmOff();
+        }
+    }else{
+        pinManager.alarmOff();
     }
 }
 
@@ -225,9 +245,15 @@ void MainWindow::saveRecord(Packet &packet)
         if(packet.getValid() && !packet.getSaved()){
             query.exec(packet.getQueryCommand());
         }
+    }
+}
+
+void MainWindow::removeOldRecords()
+{
+    if(database.isOpen()){
+        QSqlQuery query;
         QDateTime dt = QDateTime::currentDateTime();
         dt = dt.addSecs(-24*60*60);
-        query.clear();
         query.exec("DELETE FROM `node` WHERE `datetime` < \'" + dt.toString("yyyy-MM-dd HH:mm:ss") +"\'");
     }
 }
@@ -310,4 +336,5 @@ void MainWindow::manageNewPacket(QString packet)
             break;
         }
     }
+
 }

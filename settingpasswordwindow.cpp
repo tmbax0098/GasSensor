@@ -69,10 +69,7 @@ void SettingPasswordWindow::on_pushButton_5_clicked()
         //database connection state
 
         if(!database.isOpen()){
-          //  database = QSqlDatabase::addDatabase("QSQLITE");
-         //   database.setDatabaseName("users.db");
-            bool ok = database.open();
-            qDebug()<<"setting password window database is open state 2 : " << ok;
+            database = tools.openDatabase();
         }
 
         if(database.isOpen()){
@@ -135,18 +132,11 @@ void SettingPasswordWindow::openKeyBoard(int mode){
 
 void SettingPasswordWindow::showEvent(QShowEvent *event)
 {
-    database = QSqlDatabase::addDatabase("QSQLITE");
-    database.setDatabaseName(QDir::currentPath()+"/GasSensor.db");
-    bool ok = database.open();
-    qDebug()<<"setting password window database is open state : " << ok;
+    database =tools.openDatabase();
 }
 
 void SettingPasswordWindow::closeAllconnection()
 {
     database.close();
-    QStringList list = QSqlDatabase::connectionNames();
-    foreach (QString name,list) {
-        qDebug()<<"Connection closed! "<<name;
-        QSqlDatabase::removeDatabase(name);
-    }
+   tools.closeAllConnections();
 }

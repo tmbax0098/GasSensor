@@ -19,32 +19,6 @@ SettingNodeWindow::SettingNodeWindow(QWidget *parent) :
 
     this->setStyleSheet(StyleSheet);
 
-
-//    QSqlQuery query("select * from node_setting where 1");
-//    if(query.exec()){
-//        while (query.next()) {
-//            switch (query.value(0).toInt()) {
-//            case 1:
-//                setButtonValue(ui->pbNode1 ,query.value(1).toInt());
-//                break;
-//            case 2:
-//                setButtonValue(ui->pbNode2 ,query.value(1).toInt());
-//                break;
-//            case 3:
-//                setButtonValue(ui->pbNode3 ,query.value(1).toInt());
-//                break;
-//            case 4:
-//                setButtonValue(ui->pbNode4 ,query.value(1).toInt());
-//                break;
-//            case 5:
-//                setButtonValue(ui->pbNode5 ,query.value(1).toInt());
-//                break;
-//            case 6:
-//                setButtonValue(ui->pbNode6 ,query.value(1).toInt());
-//                break;
-//            }
-//        }
-//    }
 }
 
 SettingNodeWindow::~SettingNodeWindow()
@@ -65,10 +39,8 @@ void SettingNodeWindow::toggleButtonStatus(QPushButton *btn)
 {
     QString node = btn->text().split(" ")[1];
     int value = 0;
-    qDebug()<<"select value from node_setting where id=" + node + " limit 1";
 
     QSqlQuery query("select value from node_setting where id=" + node + " limit 1");
-
 
     if(query.exec()){
         if(query.first()){
@@ -87,12 +59,9 @@ void SettingNodeWindow::toggleButtonStatus(QPushButton *btn)
 
 void SettingNodeWindow::showEvent(QShowEvent *event)
 {
-    database = QSqlDatabase::addDatabase("QSQLITE");
-    database.setDatabaseName(QDir::currentPath()+"/GasSensor.db");
-    bool ok = database.open();
-    qDebug()<<"database is open state : " + this->windowTitle() + " ===> " << ok;
+    database =tools.openDatabase();
 
-    if(ok){
+    if(database.isOpen()){
         toggleButtonStatus(ui->pbNode1);
         toggleButtonStatus(ui->pbNode2);
         toggleButtonStatus(ui->pbNode3);
@@ -110,11 +79,7 @@ void SettingNodeWindow::closeEvent(QCloseEvent *event)
 void SettingNodeWindow::closeAllconnection()
 {
     database.close();
-    QStringList list = QSqlDatabase::connectionNames();
-    foreach (QString name,list) {
-        qDebug()<<"Connection closed! "<<name;
-        QSqlDatabase::removeDatabase(name);
-    }
+   tools.closeAllConnections();
 }
 
 void SettingNodeWindow::on_pbNode1_clicked()

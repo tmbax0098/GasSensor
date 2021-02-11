@@ -6,7 +6,6 @@
 #include <QNetworkRequest>
 #include <QNetworkAccessManager>
 #include <QNetworkReply>
-#include <QProcess>
 
 class Packet : public QObject
 {
@@ -32,8 +31,6 @@ public:
 
     bool getSaved() const;
 
-//    QPointF getPoint();
-
     int getMin() const;
     void setMin(int value);
 
@@ -42,10 +39,6 @@ public:
 
     bool getWarning() const;
 
-    void alarmOff();
-
-signals:
-
 private:
     double value;
     short node;
@@ -53,16 +46,8 @@ private:
     bool saved;
     bool warning;
     QDateTime date;
-
-    void alarmOn();
-
-    QString filePath = "/home/koorosh/files/";
-    void createFile(QString data);
-
     int min = 0;
     int max = 10000;
-
-    QProcess process;
 };
 
 #endif // PACKET_H

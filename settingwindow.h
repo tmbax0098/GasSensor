@@ -2,11 +2,12 @@
 #define SETTINGWINDOW_H
 
 #include <QMainWindow>
-#include <exportwindow.h>
+//#include <exportwindow.h>
 #include <settingnodewindow.h>
 #include <settingpasswordwindow.h>
 #include <settingportwindow.h>
 #include <settingtimewindow.h>
+#include<tools.h>
 
 namespace Ui {
 class SettingWindow;
@@ -43,12 +44,13 @@ private slots:
 private:
     Ui::SettingWindow *ui;
 
+    Tools tools;
 
     SettingTimeWindow settingTimeWindow;
     SettingNodeWindow settingNodeWindow;
     SettingPasswordWindow settingPasswordWindow;
     SettingPortWindow settingPortWindow;
-    ExportWindow exportWindow;
+//    ExportWindow exportWindow;
 
     // QWidget interface
 protected:

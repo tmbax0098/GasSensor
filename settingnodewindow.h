@@ -5,6 +5,7 @@
 #include <QPushButton>
 #include <QSqlDatabase>
 #include <QSqlQuery>
+#include <tools.h>
 
 namespace Ui {
 class SettingNodeWindow;
@@ -34,6 +35,7 @@ private slots:
 private:
     Ui::SettingNodeWindow *ui;
 
+    Tools tools;
     QSqlDatabase database;
 
     void setButtonValue(QPushButton *btn , int node = 0);

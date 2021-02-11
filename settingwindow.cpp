@@ -56,7 +56,7 @@ void SettingWindow::on_pushButtonPorts_clicked()
 void SettingWindow::on_pushButton_2_clicked()
 {
 
-    QString sourcePath = QDir::currentPath()+"/GasSensor.db";
+    QString sourcePath = tools.getDbPath();
 
     QFile source(sourcePath);
     if(source.exists()){

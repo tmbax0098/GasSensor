@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QSqlDatabase>
 #include <keyboardwindow.h>
+#include <tools.h>
 
 namespace Ui {
 class PasswordCertificateWindow;
@@ -34,6 +35,7 @@ private slots:
 private:
     Ui::PasswordCertificateWindow *ui;
 
+    Tools tools;
     KeyboardWindow keyboardWindow;
     QSqlDatabase database;
 

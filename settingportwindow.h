@@ -4,6 +4,7 @@
 #include <QMainWindow>
 #include <QPushButton>
 #include <QSqlDatabase>
+#include <tools.h>
 
 namespace Ui {
 class SettingPortWindow;
@@ -29,10 +30,14 @@ private slots:
 private:
     Ui::SettingPortWindow *ui;
 
+    Tools tools;
 
     QSqlDatabase database;
 
     void setButtonValue(QPushButton *btn, int value);
+
+    void updateValue(QString fieldName , int fieldIndex , QPushButton *button);
+
 
     // QWidget interface
 protected:
