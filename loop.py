@@ -94,15 +94,14 @@ def manageOutput(setting):
 def run():
         global rootFolder
         while True:
-              runCommand(["PD14" , "0"])
-			  setting = readSettingFile()
-			  manageOutput(setting)
-
-              sleep(0.3)
-              list = getFileList(rootFolder)
-              for path in list:
-                  execFile(path , setting[3])
-              sleep(0.4)
+            runCommand(["PD14" , "0"])
+            setting = readSettingFile()
+            manageOutput(setting)
+            sleep(0.3)
+            list = getFileList(rootFolder)
+            for path in list:
+                execFile(path , setting[3])
+            sleep(0.4)
 
 
 run()
