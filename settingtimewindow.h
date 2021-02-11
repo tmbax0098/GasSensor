@@ -23,8 +23,8 @@ private slots:
 
 private:
     Ui::SettingTimeWindow *ui;
-    int minute;
-    int hour;
+    int minute = 0;
+    int hour = 0;
 
     QString format(int value);
 };
